@@ -13,19 +13,19 @@
 - Si la zone privatisée a au moins 11 cases, jouer dedans est permis.
 
 ## Tâches à accomplir : 
-- Afficher la configuration courante (tableau de caractères, sans graphisme). 
-- Gérer le tour de rôle.
-- Demander au joueur courant quel coup jouer (si configuration non-finale) et vérifier qu’il s’agit d’un coup légal.
-- Actualiser le plateau.
-- Identifier si configuration est finale (impossibilité de coup légal ou deux passes de suite).
-- Compter le nombre de pièces de chaque couleur dans les groupes vivants.
-- Implémenter une IA aléatoire qui joue des coups légaux.
-- Proposer un menu, au démarrage, pour choisir entre jeu entre deux humains et jeu contre l’IA implémentée.
+- Afficher la configuration courante (tableau de caractères, sans graphisme). ❌
+- Gérer le tour de rôle. ❌
+- Demander au joueur courant quel coup jouer (si configuration non-finale) et vérifier qu’il s’agit d’un coup légal. ❌
+- Actualiser le plateau. ❌
+- Identifier si configuration est finale (impossibilité de coup légal ou deux passes de suite). ❌
+- Compter le nombre de pièces de chaque couleur dans les groupes vivants. ❌
+- Implémenter une IA aléatoire qui joue des coups légaux. ❌
+- Proposer un menu, au démarrage, pour choisir entre jeu entre deux humains et jeu contre l’IA implémentée. ❌
     ### Tâches optionelle : 
-    - Affichage avec des pixels, soit en utilisant la bibliothèque graphique simplifiée de Cay S. Horstmann, soit une autre plus développée (JavaSwing, etc...).
+    - Affichage avec des pixels, soit en utilisant la bibliothèque graphique simplifiée de Cay S. Horstmann, soit une autre plus développée (JavaSwing, etc...). ❌
 
 ## Technologies :
 - Java (Open JDK version "21.0.6" 2025-01-21)
 
 ## Getting Started : 
-   SOON...
+   🔜
