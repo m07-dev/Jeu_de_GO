@@ -1,5 +1,14 @@
 public class Arena {
 
+    char pierreBlanc;
+    char pierreNoir;
+    int joueurActuel;
+
+    public Arena(char pierreBlanc,char pierreNoir, int joueurActuel){
+        this.pierreBlanc = 'w';
+        this.pierreNoir = 'b';
+        this.joueurActuel = 2;
+    }
     /*
     int joueurActuel = 1;
 
