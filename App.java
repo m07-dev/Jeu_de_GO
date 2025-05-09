@@ -10,6 +10,10 @@ public class App {
 
         while (finDeJeu) { 
         int[] coup = Arene.demanderCoup();
+        if(Arene.nbr_passerTour == 2){
+            JOptionPane.showMessageDialog(null,"Le Jeu est Terminé, Vous avez tous les deux passé vos Tour","FIN DU JEU", JOptionPane.ERROR_MESSAGE);
+            finDeJeu = false;
+        }
         if (coup != null) {
             int x = coup[0];
             int y = coup[1];
@@ -19,11 +23,12 @@ public class App {
                 Goban.afficherPlateau();
                 Arene.changerJoueur();
             } else {
-                JOptionPane.showMessageDialog(null,"Vous ne pouvez pas poser de pierre ici ! Veuillez choisir un autre endroit","Attention", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Vous ne pouvez pas poser de pierre ici ! Veuillez choisir un autre endroit","Attention", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             System.out.println("Le joueur " + Arene.joueurActuel + " a passé son tour.");
         }
     }
+
     }
 }

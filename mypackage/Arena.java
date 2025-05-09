@@ -1,4 +1,6 @@
 package mypackage;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class Arena {
@@ -7,6 +9,7 @@ public class Arena {
     public char pierreNoir; // 1 = blanc, 2 = noir
     int pointBlanc;
     int pointNoir;
+    public int nbr_passerTour;
 
     public Arena(char pierreBlanc, char pierreNoir, int joueurActuel, int pointBlanc, int pointNoir) {
         this.pierreBlanc = pierreBlanc;
@@ -14,6 +17,7 @@ public class Arena {
         this.joueurActuel = joueurActuel;
         this.pointBlanc = pointBlanc;
         this.pointNoir = pointNoir;
+        this.nbr_passerTour = 0;
     }
 
     // Méthode pour passer son tour
@@ -23,6 +27,7 @@ public class Arena {
         }else{
             joueurActuel = 1;
         }
+        this.nbr_passerTour++;
     }
     
     public int[] demanderCoup() {
@@ -34,6 +39,7 @@ public class Arena {
         String[] sCoup = coup.split(" ");
         int posX = Integer.parseInt(sCoup[0]);
         int posY = Integer.parseInt(sCoup[1]);
+        this.nbr_passerTour = 0;
         return new int[]{posX, posY};
     }
 
@@ -42,39 +48,13 @@ public class Arena {
         joueurActuel = (joueurActuel == 1) ? 2 : 1;
     }
 
+    // Méthode pour former un groupe de Pierre
+    public int groupePierre(int posX, int posX){
+        List listGroupeVistee = new ArrayList<>();
+        while(listGroupe.size() < 10){
+
+        }
+    }
 }
 
-    /*
-     * int joueurActuel = 1;
-     * 
-     * String coup = JOptionPane.
-     * showInputDialog("Entrez la position X et la Position Y pour poser la pierre"
-     * );
-     * String[] sCoup = coup.split(" ");
-     * int posX = Integer.parseInt(sCoup[0]);
-     * int posY = Integer.parseInt(sCoup[1]);
-     * 
-     * // Fonction qui verifie la position des pierres
-     * public boolean rock_taken(int posX, int posY) {
-     * if (plateau[posX][posY] == '.') {
-     * return true;
-     * // On pose la pierre
-     * }
-     * return false; // DMD UN AUTRE COUP
-     * }
-     * 
-     * 
-     * // alterne entre joueur 1 et joueur 2
-     * /*public jouer(int joueurActuel) {
-     * 
-     * if joueurActuel == 1
-     * {
-     * this.plateau[][] = w
-     * 
-     * 
-     * 
-     * 
-     * }joueurActuel = 1 - joueurActuel;
-     * }
-     */
 
