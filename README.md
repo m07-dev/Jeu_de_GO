@@ -14,7 +14,7 @@
 
 ## Tâches à accomplir : 
 - Afficher la configuration courante (tableau de caractères, sans graphisme). ✅
-- Gérer le tour de rôle. ❌
+- Gérer le tour de rôle. ✅
 - Demander au joueur courant quel coup jouer (si configuration non-finale) et vérifier qu’il s’agit d’un coup légal. ❌
 - Actualiser le plateau. ❌
 - Identifier si configuration est finale (impossibilité de coup légal ou deux passes de suite). ❌
