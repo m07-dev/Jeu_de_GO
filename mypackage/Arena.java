@@ -1,22 +1,20 @@
 package mypackage;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JOptionPane;
 
 public class Arena {
-    public int joueurActuel;
+    public int joueurActuel; // 1 = blanc, 2 = noir
     public char pierreBlanc;
-    public char pierreNoir; // 1 = blanc, 2 = noir
-    int pointBlanc;
-    int pointNoir;
+    public char pierreNoir; 
+    public double  pointBlanc;
+    public double  pointNoir;
     public int nbr_passerTour;
 
-    public Arena(char pierreBlanc, char pierreNoir, int joueurActuel, int pointBlanc, int pointNoir) {
+    public Arena(char pierreBlanc, char pierreNoir, int joueurActuel, double  pointBlanc, double  pointNoir) {
         this.pierreBlanc = pierreBlanc;
         this.pierreNoir = pierreNoir;
         this.joueurActuel = joueurActuel;
         this.pointBlanc = pointBlanc;
-        this.pointNoir = pointNoir;
+        this.pointNoir = pointNoir; 
         this.nbr_passerTour = 0;
     }
 
@@ -31,30 +29,77 @@ public class Arena {
     }
     
     public int[] demanderCoup() {
-        String coup = JOptionPane.showInputDialog("Joueur " + joueurActuel + " Entrez la position X et la position Y pour poser la pierre (x,y) ou bien passer votre tour" );
-        if (coup.equalsIgnoreCase("passer")) { // Vérifie si le joueur veut passer
-            passerTour();
-            return null; // Retourne null pour indiquer qu'aucun coup n'a été joué
+        while (true) {
+            String coup = JOptionPane.showInputDialog("Joueur " + joueurActuel + " : Entrez la position X et Y séparés par un espace, ou cliquer 'annuler' pour passer votre tour.");
+            
+            if (coup == null || coup.equalsIgnoreCase("passer")) {
+                passerTour();
+                return null;
+            }
+    
+            String[] sCoup = coup.trim().split(" ");
+            if (sCoup.length != 2) {
+                JOptionPane.showMessageDialog(null, "Veuillez entrer exactement deux nombres séparés par un espace.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+    
+            try {
+                int posX = Integer.parseInt(sCoup[0]);
+                int posY = Integer.parseInt(sCoup[1]);
+                this.nbr_passerTour = 0;
+                return new int[]{posX, posY};
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Entrée invalide. Veuillez entrer des entiers valides.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        String[] sCoup = coup.split(" ");
-        int posX = Integer.parseInt(sCoup[0]);
-        int posY = Integer.parseInt(sCoup[1]);
-        this.nbr_passerTour = 0;
-        return new int[]{posX, posY};
     }
-
+    
     // Méthode pour changer de joueur après chaque tour
     public void changerJoueur() {
         joueurActuel = (joueurActuel == 1) ? 2 : 1;
     }
 
-    // Méthode pour former un groupe de Pierre
-    public int groupePierre(int posX, int posX){
-        List listGroupeVistee = new ArrayList<>();
-        while(listGroupe.size() < 10){
-
+    public void groupePierre(int posX, int posY, char[][] getPlateau, boolean[][] caseVisitee, int joueurActuel) {
+        // Vérifie si la position est hors limites
+        if (Plateau.enDehorsDesLimites(posX, posY, getPlateau)) {
+            return; // Arrête la récursion si la position est hors limites
         }
+        // Vérifie si la case a déjà été visitée
+        if (caseVisitee[posX][posY]) {
+            return; // Arrête la récursion si la case a déjà été visitée
+        }
+        // Vérifie si la case contient une pierre du joueur actuel
+        char pierreActuelle = (joueurActuel == 1) ? 'w' : 'b';
+        if (getPlateau[posX][posY] != pierreActuelle) {
+            return; // Arrête la récursion si la case ne contient pas une pierre du joueur actuel
+        }
+        // Marque la case comme visitée
+        caseVisitee[posX][posY] = true;
+        // Explore les cases adjacentes
+        groupePierre(posX, posY - 1, getPlateau, caseVisitee, joueurActuel); // Haut
+        groupePierre(posX, posY + 1, getPlateau, caseVisitee, joueurActuel); // Bas
+        groupePierre(posX - 1, posY, getPlateau, caseVisitee, joueurActuel); // Gauche
+        groupePierre(posX + 1, posY, getPlateau, caseVisitee, joueurActuel); // Droite
+
+        // Comptage des Points
+        double cpt = 0;
+        for (int i = 0; i < caseVisitee.length; i++) {
+            for (int j = 0; j < caseVisitee[i].length; j++) {
+                if (caseVisitee[i][j]) {
+                    cpt++;
+                }
+            }
+        }
+        if (cpt >= 10) {
+            if (joueurActuel == 1) {
+                this.pointBlanc = cpt; // Attribue les points au joueur blanc
+            } else {
+                this.pointNoir = cpt; // Attribue les points au joueur noir
+            }
+        }
+        
     }
+
 }
 
 
