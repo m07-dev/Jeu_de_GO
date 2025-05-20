@@ -92,14 +92,135 @@ public class Arena {
         }
         if (cpt >= 10) {
             if (joueurActuel == 1) {
-                this.pointBlanc = cpt; // Attribue les points au joueur blanc
+                this.pointBlanc = this.pointBlanc + cpt; // Attribue les points au joueur blanc
             } else {
-                this.pointNoir = cpt; // Attribue les points au joueur noir
+                this.pointNoir = this.pointNoir + cpt; // Attribue les points au joueur noir
             }
         }
         
     }
 
+    public int calculerTailleZoneVide(int posX, int posY, char[][] getPlateau, int[][] visitee) {
+        if (Plateau.enDehorsDesLimites(posX, posY, getPlateau)) {
+            return 0;
+        }
+    
+        // Si déjà visité, on ne refait pas
+        if (visitee[posX][posY] != 0) {
+            return 0;
+        }
+    
+        char pierreActuelle = (joueurActuel == 1) ? 'w' : 'b';
+        char pierreAdverse = (joueurActuel == 1) ? 'b' : 'w';
+    
+        if (getPlateau[posX][posY] == pierreActuelle) {
+            visitee[posX][posY] = 1; // Marquer : 1 = du joueur actuel
+            return 0;
+        } else if (getPlateau[posX][posY] == pierreAdverse) {
+            visitee[posX][posY] = 2; // Marquer : 2 = pierre ennemie
+            return 0;
+        }
+    
+        // C’est une case vide
+        visitee[posX][posY] = 3; // 3 = vide
+    
+        int taille = 1;
+    
+        taille += calculerTailleZoneVide(posX - 1, posY, getPlateau, visitee);
+        taille += calculerTailleZoneVide(posX + 1, posY, getPlateau, visitee);
+        taille += calculerTailleZoneVide(posX, posY - 1, getPlateau, visitee);
+        taille += calculerTailleZoneVide(posX, posY + 1, getPlateau, visitee);
+    
+        return taille;
+    }
+
+    // faire le methode non sucide ! ! ! ! ! !
+
+    public boolean estZonePrivatisee(int x, int y, char[][] plateau, int joueurActuel, int[][] visitee) {
+        int taille = calculerTailleZoneVide(x, y, plateau, visitee);
+    
+        if (taille > 10) return false; // Pas une zone restreinte
+    
+        char pierreAdverse = (joueurActuel == 1) ? 'b' : 'w';
+    
+        // Vérifie si une pierre adverse est autour de la zone vide
+        for (int i = 0; i < visitee.length; i++) {
+            for (int j = 0; j < visitee[i].length; j++) {
+                if (visitee[i][j] == 2) {
+                    return true; // La zone est bien privatisée par l’adversaire
+                }
+            }
+        }
+        return false;
+    }
+    
+    // Compte toutes les pierres dans les groupes vivants de chaque joueur
+    public void compterGroupesVivants(char[][] plateau) {
+        int taille = plateau.length;
+        boolean[][] visite = new boolean[taille][taille];
+        int totalBlanc = 0;
+        int totalNoir = 0;
+
+        for (int i = 0; i < taille; i++) {
+            for (int j = 0; j < taille; j++) {
+                if (!visite[i][j]) {
+                    if (plateau[i][j] == pierreBlanc) {
+                        int cpt = compterGroupe(i, j, plateau, visite, pierreBlanc);
+                        totalBlanc += cpt;
+                    } else if (plateau[i][j] == pierreNoir) {
+                        int cpt = compterGroupe(i, j, plateau, visite, pierreNoir);
+                        totalNoir += cpt;
+                    }
+                }
+            }
+        }
+        // Ajoute la prime de 0,5 au blanc
+        this.pointBlanc = totalBlanc + 0.5;
+        this.pointNoir = totalNoir;
+    }
+
+    // Compte la taille d'un groupe connecté d'une couleur donnée
+    private int compterGroupe(int x, int y, char[][] plateau, boolean[][] visite, char couleur) {
+        if (x < 0 || x >= plateau.length || y < 0 || y >= plateau.length) return 0;
+        if (visite[x][y] || plateau[x][y] != couleur) return 0;
+        visite[x][y] = true;
+        int cpt = 1;
+        cpt += compterGroupe(x + 1, y, plateau, visite, couleur);
+        cpt += compterGroupe(x - 1, y, plateau, visite, couleur);
+        cpt += compterGroupe(x, y + 1, plateau, visite, couleur);
+        cpt += compterGroupe(x, y - 1, plateau, visite, couleur);
+        return cpt;
+    }
+
+    
+    /*public static void testCalculerTailleZoneVide() {
+        // Création d'un petit plateau 5x5
+        char[][] plateau = {
+            { 'w', 'w', 'w', 'b', '·' },
+            { 'w', '·', 'w', '·', 'b' },
+            { 'w', 'b', 'w', 'b', '·' },
+            { 'w', '·', 'w', '·', '·' },
+            { 'w', 'w', 'w', '·', '·' }
+        };
+    
+        int[][] visitee = new int[5][5];
+    
+        // Création d'une arène avec joueur actuel = 1 (blanc)
+        Arena arene = new Arena('w', 'b', 1, 0, 0);
+    
+        // Position de départ pour l'exploration de la zone vide
+        int tailleZone = arene.calculerTailleZoneVide(1, 1, plateau, visitee);
+    
+        // Affichage du résultat
+        System.out.println("Taille de la zone vide = " + tailleZone);
+    
+        System.out.println("Tableau visitee :");
+        for (int i = 0; i < visitee.length; i++) {
+            for (int j = 0; j < visitee[i].length; j++) {
+                System.out.print(visitee[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }*/
+
 }
-
-
