@@ -6,17 +6,19 @@ public class AreneTest {
         testCalculerTailleZoneVide();
         testGroupePierre();
         testEstZonePrivatisee();
-        testCompterGroupesVivants(); // Nouveau test ajouté
+        testCompterGroupesVivants(); 
+        testCompterGroupesVivants(); 
+        testAucunCoupLegalPossible();
     }
 
     // Teste la fonction de calcul de la taille d'une zone vide
     public static void testCalculerTailleZoneVide() {
         char[][] plateau = {
             { 'w', 'w', 'w', 'b', '·' },
-            { 'w', '·', 'w', '·', 'b' },
-            { 'w', '.', 'w', 'b', '·' },
-            { 'w', '·', 'w', '·', '·' },
-            { 'w', 'w', 'w', '·', '·' }
+            { 'w', '.', 'w', 'w', 'b' },
+            { 'w', '.', 'w', '.', 'w' },
+            { 'w', '.', '.', '·', 'w' },
+            { 'w', 'w', 'w', 'w', '·' }
         };
         int[][] visitee = new int[5][5];
         Arena arene = new Arena('w', 'b', 1, 0, 0);
@@ -38,14 +40,14 @@ public class AreneTest {
     public static void testGroupePierre() {
         char[][] plateau = {
             { 'w', 'w', 'w', 'b', '·' },
-            { 'w', 'w', 'w', 'b', 'b' },
-            { 'w', 'b', 'w', 'b', '·' },
-            { 'w', '·', 'w', '·', '·' },
+            { 'w', '.', 'w', 'b', 'b' },
+            { 'w', '.', 'w', 'b', '·' },
+            { 'w', 'w', 'w', '·', '·' },
             { 'w', 'w', 'w', '·', '·' }
         };
         boolean[][] caseVisitee = new boolean[5][5];
         Arena arene = new Arena('w', 'b', 1, 0, 0);
-        arene.groupePierre(0, 1, plateau, caseVisitee, 1);
+        arene.groupePierre(2, 1, plateau, caseVisitee, 1);
 
         int cpt = 0;
         for (int i = 0; i < caseVisitee.length; i++) {
@@ -63,14 +65,14 @@ public class AreneTest {
     public static void testEstZonePrivatisee() {
         char[][] plateau = {
             { 'w', 'w', 'w', 'b', '·' },
-            { 'w', '·', 'w', '·', 'b' },
-            { 'w', '.', 'w', 'b', '·' },
-            { 'w', '·', 'w', '·', '·' },
-            { 'w', 'w', 'w', '·', '·' }
+            { 'w', '.', 'w', 'w', 'b' },
+            { 'w', '.', 'w', '.', 'w' },
+            { 'w', '.', '.', '·', 'w' },
+            { 'w', 'w', 'w', 'w', '·' }
         };
         int[][] visitee = new int[5][5];
-        Arena arene = new Arena('w', 'b', 2, 0, 0); // joueurActuel = noir
-        boolean priv = arene.estZonePrivatisee(1, 3, plateau, 2, visitee);
+        Arena arene = new Arena('w', 'b', 1, 0, 0); // joueurActuel = noir
+        boolean priv = arene.estZonePrivatisee(2, 1, plateau, 2, visitee);
 
         System.out.println("Test estZonePrivatisee :");
         System.out.println("Zone attendue comme privatisée (true) : " + priv);
@@ -106,6 +108,33 @@ public class AreneTest {
         }
         System.out.println();
     }
-}
 
-// Doit-on implémenter la méthode de libérté ??
+    public static void testAucunCoupLegalPossible() {
+        // Cas 1 : Aucun coup légal possible
+        // On crée un plateau où aucune case ne permet de poser une pierre (supposons avec des pierres partout ou zones privatisées)
+        char[][] plateauBloque = {
+            { 'w', 'b', 'w', 'b', 'w' },
+            { 'b', 'w', 'b', 'w', 'b' },
+            { 'w', 'b', 'w', 'b', 'w' },
+            { 'b', 'w', 'b', 'w', 'b' },
+            { 'w', 'b', 'w', 'b', 'w' }
+        };
+        Arena arene = new Arena('w', 'b', 1, 0, 0);
+        boolean resultBloque = arene.aucunCoupLegalPossible(plateauBloque);
+        System.out.println("Test aucunCoupLegalPossible (aucun coup possible) : attendu=true, obtenu=" + resultBloque);
+    
+            // Cas 2 : Au moins un coup légal possible (plateau avec cases vides)
+        char[][] plateauLibre = {
+            { '·', '·', '·', '·', '·' },
+            { '·', '·', '·', '·', '·' },
+            { '·', '·', '·', '·', '·' },
+            { '·', '·', '·', '·', '·' },
+            { '·', '·', '·', '·', '·' }
+        };
+        boolean resultLibre = arene.aucunCoupLegalPossible(plateauLibre);
+        System.out.println("Test aucunCoupLegalPossible (au moins un coup possible) : attendu=false, obtenu=" + resultLibre);
+    }
+        
+}
+    
+
